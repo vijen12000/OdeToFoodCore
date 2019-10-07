@@ -18,8 +18,8 @@ namespace OdeToFood.Data
         public IEnumerable<Restaurant> GetRestaurantByName(string name)
         {
             var query= from r in _db.Restaurants
-                where r.Name.ToLower().StartsWith(name.ToLower()) || string.IsNullOrEmpty(name)
-                orderby r.Name
+                where string.IsNullOrEmpty(name) || r.Name.ToLower().StartsWith(name.ToLower())
+                       orderby r.Name
                 select r;
 
             return query;
@@ -27,8 +27,7 @@ namespace OdeToFood.Data
 
         public Restaurant GetById(int id)
         {
-            var restaurant=_db.Restaurants.Find(id);
-            return restaurant;
+            return _db.Restaurants.Find(id);            
         }
 
         public Restaurant Update(Restaurant updatedRestaurant)
