@@ -15,7 +15,7 @@ namespace OdeToFood.Data
         {
             _db = db;
         }
-        public IEnumerable<Restaurant> GetRestaurantByName(string name)
+        public IEnumerable<Restaurant> GetRestaurantByName(string name="")
         {
             var query= from r in _db.Restaurants
                 where string.IsNullOrEmpty(name) || r.Name.ToLower().StartsWith(name.ToLower())

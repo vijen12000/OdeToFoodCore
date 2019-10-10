@@ -3,3 +3,10 @@
 ################################################################################
 
 /.vs/OdeToFood/v16
+/.vs/slnx.sqlite
+/OdeToFood/OdeToFood/bin
+/OdeToFood/OdeToFood/obj
+/OdeToFood/OdeToFood.Core/bin
+/OdeToFood/OdeToFood.Core/obj
+/OdeToFood/OdeToFood.Data/bin
+/OdeToFood/OdeToFood.Data/obj
