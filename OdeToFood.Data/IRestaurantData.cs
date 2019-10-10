@@ -5,7 +5,7 @@ namespace OdeToFood.Data
 {
     public interface IRestaurantData
     {
-        IEnumerable<Restaurant> GetRestaurantByName(string name);
+        IEnumerable<Restaurant> GetRestaurantByName(string name="");
         Restaurant GetById(int id);
         Restaurant Update(Restaurant updatedRestaurant);
         Restaurant Add(Restaurant newRestaurant);
