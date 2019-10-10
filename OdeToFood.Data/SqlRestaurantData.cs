@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using OdeToFood.Core;
 using Remotion.Linq.Clauses;
@@ -15,19 +16,24 @@ namespace OdeToFood.Data
         {
             _db = db;
         }
-        public IEnumerable<Restaurant> GetRestaurantByName(string name="")
+        public async Task<IEnumerable<Restaurant>> GetRestaurantByName(string name="")
         {
-            var query= from r in _db.Restaurants
+            var query= await Task.Run(()=>from r in _db.Restaurants
                 where string.IsNullOrEmpty(name) || r.Name.ToLower().StartsWith(name.ToLower())
                        orderby r.Name
-                select r;
+                select r);
 
             return query;
         }
 
+        public async Task<Restaurant> GetByIdAsync(int id)
+        {
+            return await _db.Restaurants.FindAsync(id);            
+        }
+
         public Restaurant GetById(int id)
         {
-            return _db.Restaurants.Find(id);            
+            return _db.Restaurants.Find(id);
         }
 
         public Restaurant Update(Restaurant updatedRestaurant)
@@ -37,15 +43,15 @@ namespace OdeToFood.Data
             return updatedRestaurant;
         }
 
-        public Restaurant Add(Restaurant newRestaurant)
+        public async Task<Restaurant> Add(Restaurant newRestaurant)
         {
-            _db.Add(newRestaurant);
+            await _db.AddAsync(newRestaurant);
             return newRestaurant;
         }
 
-        public Restaurant Delete(int id)
+        public async Task<Restaurant> Delete(int id)
         {
-            var restaurant = GetById(id);
+            var restaurant = await GetByIdAsync(id);
             if (restaurant != null)
             {
                 _db.Restaurants.Remove(restaurant);
@@ -54,14 +60,14 @@ namespace OdeToFood.Data
             return restaurant;
         }
 
-        public int GetCountOfRestaurants()
+        public async Task<int> GetCountOfRestaurants()
         {
-            return _db.Restaurants.Count();
+            return  await _db.Restaurants.CountAsync();
         }
 
-        public int Commit()
+        public async Task<int> Commit()
         {
-            return _db.SaveChanges();
+            return await _db.SaveChangesAsync();
         }
     }
 }

@@ -1,16 +1,17 @@
 ﻿using OdeToFood.Core;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace OdeToFood.Data
 {
     public interface IRestaurantData
     {
-        IEnumerable<Restaurant> GetRestaurantByName(string name="");
-        Restaurant GetById(int id);
+        Task<IEnumerable<Restaurant>> GetRestaurantByName(string name="");        
+        Task<Restaurant> GetByIdAsync(int id);
         Restaurant Update(Restaurant updatedRestaurant);
-        Restaurant Add(Restaurant newRestaurant);
-        Restaurant Delete(int id);
-        int GetCountOfRestaurants();
-        int Commit();
+        Task<Restaurant> Add(Restaurant newRestaurant);
+        Task<Restaurant> Delete(int id);
+        Task<int> GetCountOfRestaurants();
+        Task<int> Commit();
     }
 }

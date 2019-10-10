@@ -22,9 +22,9 @@ namespace OdeToFood.Pages.Restaurants
             RestaurantData = restaurantData;
         }
 
-        public IActionResult OnGet(int restaurantId)
+        public async Task<IActionResult> OnGet(int restaurantId)
         {            
-            Restaurant = RestaurantData.GetById(restaurantId);
+            Restaurant = await RestaurantData.GetByIdAsync(restaurantId);
             if (Restaurant == null)
             {
                 return RedirectToPage("./NotFound");

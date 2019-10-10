@@ -17,18 +17,18 @@ namespace OdeToFood.Pages.Restaurants
         {
             this.restaurantData = restaurantData;
         }
-        public IActionResult OnGet(int restaurantId)
+        public async Task<IActionResult> OnGet(int restaurantId)
         {
-            Restaurant = restaurantData.GetById(restaurantId);
+            Restaurant = await restaurantData.GetByIdAsync(restaurantId);
             if (Restaurant == null)
             {
                 return RedirectToPage("./NotFound");
             }
             return Page();
         }
-        public IActionResult OnPost(int restaurantId)
+        public async Task<IActionResult> OnPost(int restaurantId)
         {
-            var restaurant = restaurantData.Delete(restaurantId);
+            var restaurant =await restaurantData.Delete(restaurantId);
             restaurantData.Commit();
             if(restaurant==null)
             {

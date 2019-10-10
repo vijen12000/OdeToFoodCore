@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using OdeToFood.Core;
 
 namespace OdeToFood.Data
@@ -18,16 +19,16 @@ namespace OdeToFood.Data
             };
         }
 
-        public Restaurant Add(Restaurant newRestaurant)
+        public async Task<Restaurant> Add(Restaurant newRestaurant)
         {
-            restaurants.Add(newRestaurant);
+            await Task.Run(() => restaurants.Add(newRestaurant));            
             newRestaurant.Id = restaurants.Max(r => r.Id) + 1;
             return newRestaurant;
         }
 
-        public Restaurant Delete(int id)
+        public async Task<Restaurant> Delete(int id)
         {
-            var restaurant = restaurants.FirstOrDefault(r => r.Id == id);
+            var restaurant = await GetByIdAsync(id);
             if (restaurant != null)
             {
                 restaurants.Remove(restaurant);
@@ -36,32 +37,38 @@ namespace OdeToFood.Data
             return restaurant;
         }
 
-        public int GetCountOfRestaurants()
+        public async Task<int> GetCountOfRestaurants()
         {
-            return restaurants.Count;
+            return await Task.Run(() => restaurants.Count);
         }
 
-        public int Commit()
+        public async Task<int> Commit()
         {
-            return 0;
+            return await Task.Run(() => 0);
+        }
+        
+        public async Task<Restaurant> GetByIdAsync(int id)
+        {
+            return await Task.Run(() => restaurants.SingleOrDefault(r => r.Id == id));
         }
 
-        public Restaurant GetById(int id)
+        public async Task<IEnumerable<Restaurant>> GetRestaurantByName(string name=null)
         {
-            return restaurants.SingleOrDefault(r => r.Id == id);
-        }
-
-        public IEnumerable<Restaurant> GetRestaurantByName(string name=null)
-        {
-            return from r in restaurants
+            return await Task.Run(() => from r in restaurants
                 where string.IsNullOrEmpty(name) || r.Name.ToLower().StartsWith(name.ToLower())
                 orderby r.Name
-                select r;
-        }
+                select r);
 
+            //return from r in restaurants
+            //    where string.IsNullOrEmpty(name) || r.Name.ToLower().StartsWith(name.ToLower())
+            //    orderby r.Name
+            //    select r;
+        }
+        
         public Restaurant Update(Restaurant updatedRestaurant)
-        {
+        {            
             var restaurant = restaurants.SingleOrDefault(r => r.Id == updatedRestaurant.Id);
+
             if (restaurant != null)
             {
                 restaurant.Name = updatedRestaurant.Name;
@@ -69,6 +76,6 @@ namespace OdeToFood.Data
                 restaurant.Cuisine = updatedRestaurant.Cuisine;
             }
             return restaurant;
-        }
+        }      
     }
 }
