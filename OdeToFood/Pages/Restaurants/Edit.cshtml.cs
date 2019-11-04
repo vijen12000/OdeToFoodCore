@@ -25,12 +25,12 @@ namespace OdeToFood.Pages.Restaurants
             this.htmlHeper = htmlHeper;
         }
         
-        public IActionResult OnGet(int? restaurantId)
+        public async Task<IActionResult> OnGet(int? restaurantId)
         {
             Cuisines = htmlHeper.GetEnumSelectList<CuisineType>();
             if (restaurantId.HasValue)
             {
-                Restaurant = this.restaurantData.GetById(restaurantId.Value);
+                Restaurant = await this.restaurantData.GetByIdAsync(restaurantId.Value);
             }
             else
             {

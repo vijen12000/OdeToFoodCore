@@ -23,9 +23,9 @@ namespace OdeToFood.API
 
         // GET: api/Restaurants
         [HttpGet]
-        public IEnumerable<Restaurant> GetRestaurants()
+        public async Task<IEnumerable<Restaurant>> GetRestaurants()
         {
-            return _restaurantData.GetRestaurantByName();
+            return await _restaurantData.GetRestaurantByName();
         }
 
         // GET: api/Restaurants/5
@@ -37,7 +37,7 @@ namespace OdeToFood.API
                 return BadRequest(ModelState);
             }
 
-            var restaurant = await _restaurantData.GetById(id);
+            var restaurant = await _restaurantData.GetByIdAsync(id);
 
             if (restaurant == null)
             {
@@ -61,15 +61,15 @@ namespace OdeToFood.API
                 return BadRequest();
             }
 
-            _restaurantData.Entry(restaurant).State = EntityState.Modified;
+            _restaurantData.Update(restaurant);
 
             try
             {
-                await _restaurantData.SaveChangesAsync();
+                await _restaurantData.Commit();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!RestaurantExists(id))
+                if (!await RestaurantExists(id))
                 {
                     return NotFound();
                 }
@@ -91,8 +91,8 @@ namespace OdeToFood.API
                 return BadRequest(ModelState);
             }
 
-            _restaurantData.Restaurants.Add(restaurant);
-            await _restaurantData.SaveChangesAsync();
+            await _restaurantData.Add(restaurant);
+            await _restaurantData.Commit();
 
             return CreatedAtAction("GetRestaurant", new { id = restaurant.Id }, restaurant);
         }
@@ -106,21 +106,21 @@ namespace OdeToFood.API
                 return BadRequest(ModelState);
             }
 
-            var restaurant = await _restaurantData.Restaurants.FindAsync(id);
+            var restaurant = await _restaurantData.GetByIdAsync(id);
             if (restaurant == null)
             {
                 return NotFound();
             }
 
-            _restaurantData.Restaurants.Remove(restaurant);
-            await _restaurantData.SaveChangesAsync();
+            await _restaurantData.Delete(id);
+            await _restaurantData.Commit();
 
             return Ok(restaurant);
         }
 
-        private bool RestaurantExists(int id)
+        private async Task<bool> RestaurantExists(int id)
         {
-            return _restaurantData.Restaurants.Any(e => e.Id == id);
+            return await _restaurantData.GetCountOfRestaurants()>0;
         }
     }
 }

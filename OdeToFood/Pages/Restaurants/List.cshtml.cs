@@ -27,10 +27,10 @@ namespace OdeToFood.Pages.Restaurants
             this.restaurantData = restaurantData;
         }
 
-        public void OnGet()
+        public async void OnGet()
         {            
             Message = Configuration["Message"];
-            Restaurants = this.restaurantData.GetRestaurantByName(SearchTerm);
+            Restaurants = await this.restaurantData.GetRestaurantByName(SearchTerm);
         }
     }
 }
