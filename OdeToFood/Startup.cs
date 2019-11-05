@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -56,11 +57,30 @@ namespace OdeToFood
                 app.UseHsts();
             }
 
+            //app.Use(SayHelloMiddleware);
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
             app.UseMvc();
         }
+
+        //private RequestDelegate SayHelloMiddleware(RequestDelegate next)
+        //{
+        //    return async ctx =>
+        //    {
+        //        if (ctx.Request.Path.StartsWithSegments("/hello")) ;
+        //        {
+        //            if (ctx.Request.Path.StartsWithSegments("/hello"))
+        //            {
+        //                await ctx.Response.WriteAsync("Hello, World");
+        //            }
+        //            else
+        //            {
+        //                await next(ctx);
+        //            }
+        //        }
+        //    };
+        //}
     }
 }
